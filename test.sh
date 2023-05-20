@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 
 sleep 10
 if curl --output /dev/null --silent --head --fail http://localhost:3000; then
