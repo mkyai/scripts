@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sleep 10
+sleep 15
 if curl --output /dev/null --silent --head --fail http://localhost:3000; then
     msg="<!channel>\n[$(date +%T)] : Server is up :white_check_mark:\nDeployment successful."
 else
