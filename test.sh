@@ -1,7 +1,7 @@
 #!/bin/bash
 
 sleep 15
-source .env
+source changelog
 if curl --output /dev/null --silent --head --fail http://localhost:3000; then
     msg="<!channel>\nDeployment successful :white_check_mark: $DEPLOYMENT_UPDATES"
 else
