@@ -1,9 +1,8 @@
 #!/bin/bash
 
 sleep 15
-source changelog
 if curl --output /dev/null --silent --head --fail http://localhost:3000; then
-    msg="<!channel>\nDeployment successful :white_check_mark: $DEPLOYMENT_UPDATES"
+    msg="<!channel>\nDeployment successful :white_check_mark:\n- $(git log -1 --pretty=%B)"
 else
     msg="<!channel>\nDeployment failed :x:"
 fi
