@@ -2,9 +2,9 @@
 
 sleep 15
 if curl --output /dev/null --silent --head --fail http://localhost:3000; then
-    msg="<!channel>\nDeployment successful :white_check_mark:\n- $(git log -1 --pretty=%B)"
+    msg="Deployment successful :white_check_mark:\n- $(git log -1 --pretty=%B)"
 else
-    msg="<!channel>\nDeployment failed :x:"
+    msg="Deployment failed :x:"
 fi
 
 [ -f ./slack.sh ] && ./slack.sh "$msg" || 
