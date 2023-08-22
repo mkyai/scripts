@@ -2,7 +2,7 @@
 
 sleep 2
 source .env
-if curl --output /dev/null --silent --head --fail "$WEB_URL" then
+if curl --output /dev/null --silent --head --fail $WEB_URL; then
     msg="[FE] Deployment successful :white_check_mark:\n- $(git log -1 --pretty=%B)"
 else
     msg="[FE] Deployment failed :x:"
