@@ -17,7 +17,7 @@ done < "$file_path"
 npx prisma migrate dev --name dynamic_module
 
 [ -f ./module-setup.sh ] && echo "script exists" || 
-(curl https://raw.githubusercontent.com/mkyai/scripts/master/module-setup.sh -o module-setup.sh && 
+curl https://raw.githubusercontent.com/mkyai/scripts/master/module-setup.sh -o module-setup.sh && 
 chmod +x ./module-setup.sh
 
 for name in "${names[@]}"; do
