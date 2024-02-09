@@ -20,6 +20,7 @@ echo "Installing PM2..."
 npm install pm2 -g
 
 sudo snap install --classic certbot
+#!/bin/bash
 
 echo "Do you want to install Docker? (y/n)"
 read docker
@@ -78,17 +79,17 @@ if [ "$postgres" = "y" ]; then
     echo "Enter new password for PostgreSQL:"
     read password
     if [ -n "$password" ]; then
-        sudo -u postgres psql -c "ALTER USER postgres PASSWORD '$password';"
+        sudo -Hu postgres psql -c "ALTER USER postgres PASSWORD '$password';"
     fi
     echo "Enter new database name:"
     read dbname
     if [ -n "$dbname" ]; then
-        sudo -u postgres psql -c "CREATE DATABASE $dbname;"
+        sudo -Hu postgres psql -c "CREATE DATABASE $dbname;"
     fi
     echo "Enter new username:"
     read username
     if [ -n "$username" ]; then
-        sudo -u postgres psql -c "CREATE USER $username WITH ENCRYPTED PASSWORD '$password';"
+        sudo -Hu postgres psql -c "CREATE USER $username WITH ENCRYPTED PASSWORD '$password';"
     fi  
     sudo systemctl restart postgresql
     echo "PostgreSQL configured successfully"
@@ -155,6 +156,10 @@ if [ "$auto_deploy" = "y" ]; then
 
     pm2 start index.js
     pm2 save
+
+    else
+        echo "Auto-deployment server installation skipped"
+fi
 
 echo "Setup and configuration completed successfully"
 echo "Exiting..."
