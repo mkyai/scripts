@@ -23,7 +23,7 @@ sudo snap install --classic certbot
 
 echo "Do you want to install Docker? (y/n)"
 read docker
-if [ $docker == "y" ]; then
+if [ "$docker" = "y" ]; then
     echo "Installing Docker..."
     sudo snap install docker
     echo "Docker installed successfully"
@@ -39,7 +39,7 @@ sudo ufw allow 'Nginx Full'
 echo "Do you want to configure Nginx for a new website? (y/n)"
 read nginx
 
-if [ $nginx == "y" ]; then
+if [ "$nginx" = "y" ]; then
     echo "Configuring Nginx for a new website..."
     echo "Enter your domain name (e.g. example.com):"
     read domain
@@ -73,7 +73,7 @@ sudo systemctl enable postgresql
 echo "Do you want to configure PostgreSQL? (y/n)"
 read postgres
 
-if [ $postgres == "y" ]; then
+if [ "$postgres" = "y" ]; then
     echo "Configuring PostgreSQL..."
     echo "Enter new password for PostgreSQL:"
     read password
@@ -104,7 +104,7 @@ echo "Redis started successfully"
 echo "Do you want to configure Certbot? (y/n)"
 read certbot
 
-if [ $certbot == "y" ]; then
+if [ "$certbot" = "y" ]; then
     echo "Configuring Certbot..."
     echo "Enter your email address:"
     read email
@@ -121,7 +121,7 @@ read auto_deploy
 
 mkdir -p /home/ubuntu/api
 
-if [ $auto_deploy == "y" ]; then
+if [ "$auto_deploy" = "y" ]; then
     echo "Installing auto-deployment server..."
     mkdir -p /home/ubuntu/deploy
     cd /home/ubuntu/deploy
