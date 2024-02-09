@@ -1,4 +1,5 @@
 #!/bin/bash
+export DEBIAN_FRONTEND=noninteractive
 echo "Welcome to the server setup and configuration script"
 
 echo "Updating the system..."
