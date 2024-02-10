@@ -20,7 +20,6 @@ echo "Installing PM2..."
 npm install pm2 -g
 
 sudo snap install --classic certbot
-#!/bin/bash
 
 echo "Do you want to install Docker? (y/n)"
 read docker
@@ -76,21 +75,25 @@ read postgres
 
 if [ "$postgres" = "y" ]; then
     echo "Configuring PostgreSQL..."
-    echo "Enter new password for PostgreSQL:"
-    read password
-    if [ -n "$password" ]; then
-        sudo -Hu postgres psql -c "ALTER USER postgres PASSWORD '$password';"
+    read -p "Enter Database Name: " dbname
+    read -p "Enter Database User: " dbuser
+    read -p "Enter Database Password: " dbpass
+    echo
+
+    if [ -z "$dbname" ]; then
+        CREATE_DB="CREATE DATABASE $dbname;"
+        sudo  -i -u postgres psql -c "$CREATE_DB"
+        echo "Database with name $dbname created successfully"
     fi
-    echo "Enter new database name:"
-    read dbname
-    if [ -n "$dbname" ]; then
-        sudo -Hu postgres psql -c "CREATE DATABASE $dbname;"
+
+    if [ -z "$dbuser" ]; then
+        CREATE_USER="CREATE USER $dbuser WITH ENCRYPTED PASSWORD '$dbpass';"
+        GRANT_PRIVILEGES="GRANT ALL PRIVILEGES ON DATABASE $dbname TO $dbuser;"
+        sudo  -i -u postgres psql -c "$CREATE_USER"
+        sudo  -i -u postgres psql -c "$GRANT_PRIVILEGES"
+        echo "User with name $dbuser created successfully"
     fi
-    echo "Enter new username:"
-    read username
-    if [ -n "$username" ]; then
-        sudo -Hu postgres psql -c "CREATE USER $username WITH ENCRYPTED PASSWORD '$password';"
-    fi  
+
     sudo systemctl restart postgresql
     echo "PostgreSQL configured successfully"
 else
@@ -101,6 +104,21 @@ echo "Starting Redis..."
 sudo systemctl start redis
 sudo systemctl enable redis
 echo "Redis started successfully"
+
+echo "Do you want to configure Redis password? (y/n)"
+read redis_pass
+
+if [ "$redis_pass" = "y" ]; then
+    echo "Enter Redis password:"
+    read password
+    if [ -z "$password" ]; then
+        sudo sed -i "s/# requirepass foobared/requirepass $password/" /etc/redis/redis.conf
+        sudo systemctl restart redis
+        echo "Redis configured successfully with password"
+    fi
+else
+    echo "Redis configuration skipped"
+fi
 
 echo "Do you want to configure Certbot? (y/n)"
 read certbot
@@ -129,6 +147,8 @@ if [ "$auto_deploy" = "y" ]; then
     git clone https://github.com/mkyai/auto-deploy.git .
     npm install
     touch .env
+    chmod +x pre.sh
+    chmod +x slack.sh
 
     echo "Enter logtail key"
     read logtail
