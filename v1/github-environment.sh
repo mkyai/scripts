@@ -34,6 +34,13 @@ if [ -z "$repo" ]; then
     exit 1
 fi
 
+echo "Specify branch (default: develop):"
+read branch
+
+if [ -z "$branch" ]; then
+    branch="develop"
+fi
+
 if [ -f "$env_file" ]; then
 
     while IFS='=' read -r key value || [ -n "$key" ];
@@ -44,6 +51,10 @@ if [ -f "$env_file" ]; then
 
         if [[ $key == \#* ]]; then
             continue
+        fi
+
+        if [ "$branch" != "develop" ]; then
+            key="_"$(echo $branch | tr '[:lower:]' '[:upper:]')"_"$key
         fi
 
         echo "Setting $key=$value"
